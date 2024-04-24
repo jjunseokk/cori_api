@@ -2,10 +2,12 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import Controllers from "./controllers/index.js";
-import { createProxyMiddleware } from "http-proxy-middleware";
+import dotenv from 'dotenv';
+
+
+dotenv.config();
 
 const app = express();
-
 // 미들웨어
 app.use(
   cors({
