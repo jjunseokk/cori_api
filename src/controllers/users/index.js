@@ -30,7 +30,7 @@ const createUser = (req, res, next) => {
           return res.status(500).json({ Error: "데이터베이스 오류" });
         }
 
-        if (result.length > 0) {
+        if (Array.isArray(result) && result.length > 0) {
           return res.json({
             error: "이미 가입된 이메일입니다.",
             type: "error",
