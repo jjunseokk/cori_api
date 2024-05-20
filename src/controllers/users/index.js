@@ -22,7 +22,7 @@ const s3 = new AWS.S3({
 });
 
 // 확장자 검사 목록
-const allowedExtensions = [".png", ".jpg", ".jpeg", ".bmp", ".gif"];
+const allowedExtensions = [".png", ".jpg", ".jpeg", ".bmp", ".gif", ".webp"];
 
 const storage = multerS3({
   s3, // AWS S3 연결
