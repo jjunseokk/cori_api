@@ -6,11 +6,13 @@ import dotenv from "dotenv";
 import multer from "multer";
 import AWS from "aws-sdk";
 import multerS3 from "multer-s3";
+import path from "path";
+import sharp from "sharp";
 
 dotenv.config();
 
 const router = Router();
-const path = "/users";
+const pathName = "/users";
 const secretKey = process.env.SECRET_KEY;
 
 const s3 = new AWS.S3({
@@ -28,8 +30,15 @@ const storage = multerS3({
   bucket: process.env.BUCKET_NAME, // S3 Bucket의 이름
   contentType: multerS3.AUTO_CONTENT_TYPE, // 파일 MIME 타입 자동 지정
   key: (req, file, cb) => {
-    // 파일 이름 생성 및 반환
-    cb(null, "profile_Img");
+    // 확장자 검사
+    const extension = path.extname(file.originalname).toLowerCase();
+    if (!allowedExtensions.includes(extension)) {
+      return cb(new Error("확장자 에러"));
+    }
+
+    const fileName = file.originalname.split(".")[0];
+    // // 파일 이름 생성 및 반환
+    cb(null, `profileImage/${fileName}.webp`);
   },
 });
 
@@ -39,8 +48,6 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 }, // 파일 크기 제한
   defaultValue: { path: "", mimetype: "" }, // 기본 값
 });
-
-
 
 // 유저 정보 주기
 const getProfile = (req, res, next) => {
@@ -62,28 +69,36 @@ const getProfile = (req, res, next) => {
 
 // 프로필 업데이트
 const updateProfile = (req, res, next) => {
-  console.log(req.file);
   try {
-    const { name, profileImage, position, explanation } = req.body;
+
+    const { name, position, explanation } = req.body;
+    const profileImage = req.file.location;
 
     const getToken = req.get("Authorization");
     const token = getToken.split(" ")[1];
     const verified = jwt.verify(token, secretKey);
     const email = verified?.email;
-    const updateProfileQuery = `UPDATE User SET name = '${name}', position = '${position}', explanation ='${explanation}' WHERE email = ?`;
+
+    let updateProfileQuery = `UPDATE User SET name = '${name}', position = '${position}', explanation ='${explanation}'`;
+
+    if (req.file) {
+      updateProfileQuery += `, profileImg ='${profileImage}'`;
+    }
+
+    updateProfileQuery += ` WHERE email = ?`;
 
     connection.query(updateProfileQuery, email, (err, result) => {
       if (err) {
         return res.status(500).json({ Error: err.message });
       }
       if (name === "") {
-        res.json({
+        res.status(400).json({
           message: "이름은 필수 입력입니다.",
           name: false,
           statusCode: 400,
         });
       } else if (position === "") {
-        res.json({
+        res.status(400).json({
           message: "대표포지션은 필수 입력입니다.",
           position: false,
           statusCode: 400,
@@ -195,5 +210,5 @@ router.post("/login", loginUser);
 
 export default {
   router,
-  path,
+  pathName,
 };

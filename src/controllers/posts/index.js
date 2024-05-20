@@ -8,7 +8,7 @@ import moment from "moment";
 dotenv.config();
 
 const router = Router();
-const path = "/posts";
+const pathName = "/posts";
 const secretKey = process.env.SECRET_KEY;
 
 // 글쓰기
@@ -121,5 +121,5 @@ router.get("/getTop10", getTop10);
 
 export default {
   router,
-  path,
+  pathName,
 };

@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: "700mb" }));
 
 Controllers.forEach((controller) => {
-  app.use(controller.path, controller.router);
+  app.use(controller.pathName, controller.router);
 });
 
 app.get("/", (req, res) => {
