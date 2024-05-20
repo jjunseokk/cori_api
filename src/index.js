@@ -2,19 +2,16 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import Controllers from "./controllers/index.js";
-import dotenv from 'dotenv';
-
-
-dotenv.config();
 
 const app = express();
 // 미들웨어
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", "https://cori-seven.vercel.app"],
     credentials: true,
   })
 );
+
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: "700mb" }));
