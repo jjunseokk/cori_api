@@ -48,7 +48,7 @@ const writePost = (req, res, next) => {
 const getPost = (req, res, next) => {
   const { page } = req.query;
 
-  const getPostQuery = `SELECT u.id, u.name,
+  const getPostQuery = `SELECT u.id, u.name, u.loginId,
   p.id as postId, p.title, p.content, p.createdPost, p.selectOption, p.view
   From User AS u
   Join Post AS p
@@ -89,7 +89,7 @@ const updateView = (req, res, next) => {
 const getTop10 = (req, res, next) => {
   const { page } = req.query;
 
-  const getPost = `SELECT u.id, u.name,
+  const getPost = `SELECT u.id, u.name, u.loginId,
   p.id as postId, p.title, p.content, p.createdPost, p.selectOption, p.view
   From User AS u
   Join Post AS p
