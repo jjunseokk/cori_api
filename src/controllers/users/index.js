@@ -66,7 +66,9 @@ const getProfile = (req, res, next) => {
       }
       res.status(200).json({ User: result });
     });
-  } catch {}
+  } catch (error) {
+    return res.status(500).json({ Error: error.message });
+  }
 };
 
 // 프로필 업데이트
@@ -112,8 +114,8 @@ const updateProfile = (req, res, next) => {
         res.status(200).json({ profile: "success" });
       }
     });
-  } catch (err) {
-    return res.status(500).json({ Error: err.message });
+  } catch (error) {
+    return res.status(500).json({ Error: error.message });
   }
 };
 
@@ -155,7 +157,7 @@ const createUser = (req, res, next) => {
       });
     });
   } catch (err) {
-    next(err);
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -213,7 +215,7 @@ const emailCertification = (req, res, next) => {
       });
     });
   } catch (error) {
-    res.status(500).json({ message: "서버 내부 오류" });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -265,7 +267,7 @@ const loginUser = (req, res, next) => {
       }
     });
   } catch (err) {
-    next(err);
+    res.status(500).json({ message: error.message });
   }
 };
 
