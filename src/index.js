@@ -7,7 +7,11 @@ const app = express();
 // 미들웨어
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://cori-seven.vercel.app"],
+    origin: [
+      "http://localhost:3000",
+      "https://cori-seven.vercel.app",
+      "https://randing-gamma.vercel.app",
+    ],
     credentials: true,
   })
 );
