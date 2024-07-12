@@ -11,6 +11,8 @@ app.use(
       "http://localhost:3000",
       "https://cori-seven.vercel.app",
       "https://randing-gamma.vercel.app",
+      "https://randing-gamma.vercel.app/FirstType",
+      "https://randing-gamma.vercel.app/SecondType",
     ],
     credentials: true,
   })
