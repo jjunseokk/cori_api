@@ -64,7 +64,7 @@ const getProfile = (req, res, next) => {
       if (err) {
         return res.status(500).json({ Error: err.message });
       }
-      res.status(200).json({ User: result });
+      res.status(200).json(result);
     });
   } catch (error) {
     return res.status(500).json({ Error: error.message });
@@ -251,13 +251,7 @@ const loginUser = (req, res, next) => {
           } else {
             if (same === true) {
               res.json({
-                user: {
-                  name: result[0].name,
-                  profileImg: result[0].profileImg,
-                  explanation: result[0].explanation,
-                  position: result[0].position,
-                  token: token,
-                },
+                token: token,
               });
             }
           }

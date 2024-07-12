@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router, json } from "express";
 import { connection } from "../../db/mysql.js";
 import multer from "multer";
 import multerS3 from "multer-s3";
@@ -32,11 +32,11 @@ const storage = multerS3({
     // 확장자 검사
     const extension = path.extname(file.originalname).toLowerCase();
     if (!allowedExtensions.includes(extension)) {
-      return cb(new Error("확장자 에러"));
+      return json.status(500).json({ Error: "확장자 에러" });
     }
 
     const fileName = file.originalname.split(".")[0];
-    // // 파일 이름 생성 및 반환
+    // 파일 이름 생성 및 반환
     cb(null, `thumbnailImage/${fileName}.webp`);
   },
 });
@@ -52,6 +52,8 @@ const upload = multer({
 const writePost = (req, res, next) => {
   const { title, content, selectOption, userId } = req.body;
   const thumbnailImage = req.file ? req.file.location : null;
+
+  console.log(thumbnailImage);
 
   try {
     const getToken = req.get("Authorization");
